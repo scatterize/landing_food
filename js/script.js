@@ -82,7 +82,59 @@ window.addEventListener('DOMContentLoaded', () => {
       }
     }
   }
-
   setClock('.timer', deadLineDate);
-  //const timerBlock = document.querySelectorAll('timer__block');
+
+  // modalView
+
+  const modalBtns = document.querySelectorAll('[data-modal]');
+  const modalCloseBtn = document.querySelectorAll('[data-close]');
+  const modalView = document.querySelector('.modal');
+
+  function openModal() {
+    modalView.classList.add('show');
+    modalView.classList.remove('hide');
+    document.body.style.overflow = 'hidden';
+    clearInterval(modalTimerId);
+  }
+
+  function closeModal() {
+    modalView.classList.add('hide');
+    modalView.classList.remove('show');
+    document.body.style.overflow = '';
+    //modalView.style.display = 'none';
+  }
+  modalCloseBtn.forEach((item, i) => {
+    item.addEventListener('click', closeModal);
+  });
+
+  modalBtns.forEach((item, i) => {
+    item.addEventListener('click', openModal);
+  });
+
+  modalView.addEventListener('click', (e) => {
+    if (e.target == modalView) {
+      closeModal();
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.code === 'Escape' && modalView.classList.contains('show')) {
+      closeModal();
+    }
+  });
+  function showModalByScroll() {
+    if (
+      window.pageYOffset + document.documentElement.clientHeight >=
+      document.documentElement.scrollHeight
+    ) {
+      openModal();
+      window.removeEventListener('scroll', showModalByScroll);
+    }
+  }
+
+  window.addEventListener('scroll', showModalByScroll);
+  //modalTime();
+  //const modalTimerId = setTimeout(openModal, 3000);
+
+  //Class for cards
 });
