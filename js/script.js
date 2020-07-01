@@ -157,9 +157,11 @@ window.addEventListener('DOMContentLoaded', () => {
       this.parent = document.querySelector(parentSelector);
       this.changeToRub();
     }
+
     changeToRub() {
       this.price = this.price * this.transfer;
     }
+
     render() {
       const element = document.createElement('div');
       if (this.classes.length === 0) {
@@ -215,4 +217,57 @@ window.addEventListener('DOMContentLoaded', () => {
     'menu__item',
     'big'
   ).render();
+
+  //Forms
+  const forms = document.querySelectorAll('form');
+  const message = {
+    loading: 'loading',
+    success: 'success',
+    failure: 'fail',
+  };
+
+  forms.forEach((form, i) => {
+    postData(form);
+  });
+
+  function postData(form) {
+    form.addEventListener('submit', (e) => {
+      //обработчик события на отправку
+      e.preventDefault();
+
+      const statusMessage = document.createElement('div');
+      statusMessage.classList.add('status');
+      statusMessage.textContent = message.loading;
+      form.append(statusMessage);
+
+      const request = new XMLHttpRequest(); // создаем запрос
+      request.open('POST', 'server.php');
+
+      request.setRequestHeader('Content-type', 'application/json');
+      const formData = new FormData(form);
+
+      const object = {};
+
+      formData.forEach(function (value, key) {
+        object[key] = value;
+      });
+
+      const json = JSON.stringify(object);
+      request.send(json); // отправляем запрос
+
+      request.addEventListener('load', () => {
+        //создаем обработчик событий, что реквест загрузился!!
+        if (request.status === 200) {
+          console.log(request.response);
+          statusMessage.textContent = message.success;
+          form.reset();
+          setTimeout(() => {
+            statusMessage.remove();
+          }, 2000);
+        } else {
+          statusMessage.textContent = message.failure;
+        }
+      });
+    });
+  }
 });
