@@ -37,7 +37,7 @@ window.addEventListener('DOMContentLoaded', () => {
   tabItems.addEventListener('click', tabActive);
 
   //timer
-  const deadLineDate = '2020-07-02';
+  const deadLineDate = '2020-07-06';
 
   function getTimeRemaining(endTime) {
     const t = Date.parse(endTime) - Date.parse(new Date()),
@@ -240,11 +240,11 @@ window.addEventListener('DOMContentLoaded', () => {
       //form.append(statusMessage);
       form.insertAdjacentElement('afterend', statusMessage);
 
-      const request = new XMLHttpRequest(); // создаем запрос
-      request.open('POST', 'server.php');
-
-      request.setRequestHeader('Content-type', 'application/json');
       const formData = new FormData(form);
+      // const request = new XMLHttpRequest(); // создаем запрос
+      // request.open('POST', 'server.php'); //меняем на новый фетч
+
+      //request.setRequestHeader('Content-type', 'application/json');
 
       const object = {};
 
@@ -253,21 +253,40 @@ window.addEventListener('DOMContentLoaded', () => {
       });
 
       const json = JSON.stringify(object);
-      request.send(json); // отправляем запрос
-
-      request.addEventListener('load', () => {
-        //создаем обработчик событий, что реквест загрузился!!
-        if (request.status === 200) {
-          console.log(request.response);
+      // request.send(json); // отправляем запрос
+      fetch('server.php', {
+        method: 'POST',
+        body: json,
+        headers: {
+          'Content-type': 'application/json',
+        },
+      })
+        .then((data) => data.text())
+        .then((data) => {
+          console.log(data);
           showThanksModal(message.success);
-          //statusMessage.textContent = message.success;
-          form.reset();
           statusMessage.remove();
-        } else {
+        })
+        .catch(() => {
           showThanksModal(message.failure);
-          //statusMessage.textContent = message.failure;
-        }
-      });
+        })
+        .finally(() => {
+          form.reset();
+        });
+
+      // request.addEventListener('load', () => {
+      //   //создаем обработчик событий, что реквест загрузился!!
+      //   if (request.status === 200) {
+      //     console.log(request.response);
+      //     showThanksModal(message.success);
+      //     //statusMessage.textContent = message.success;
+      //     form.reset();
+      //     statusMessage.remove();
+      //   } else {
+      //     showThanksModal(message.failure);
+      //     //statusMessage.textContent = message.failure;
+      //   }
+      // });
     });
   }
 
