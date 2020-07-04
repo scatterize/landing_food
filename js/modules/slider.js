@@ -1,11 +1,20 @@
-function slider() {
+function slider({
+  container,
+  slide,
+  nextArrow,
+  prevArrow,
+  totalCounter,
+  currentCounter,
+  wrapper,
+  field,
+}) {
   //slider easy variation
-  const slideImages = document.querySelectorAll('.offer__slide'),
-    slider = document.querySelector('.offer__slider');
-  const prevImage = document.querySelector('.offer__slider-prev');
-  const nextImage = document.querySelector('.offer__slider-next'),
-    total = document.querySelector('#total'),
-    current = document.querySelector('#current');
+  const slideImages = document.querySelectorAll(slide),
+    slider = document.querySelector(container);
+  const prevImage = document.querySelector(prevArrow);
+  const nextImage = document.querySelector(nextArrow),
+    total = document.querySelector(totalCounter),
+    current = document.querySelector(currentCounter);
   let currentSlide = 1;
   //<---- начало старого кода ---->
   // showCurrentSlide(currentSlide);
@@ -46,8 +55,8 @@ function slider() {
   // <---- конец старого кода ---->
 
   // slider corousel variation
-  const sliderWrapper = document.querySelector('.offer__slider-wrapper'),
-    slidesField = document.querySelector('.offer__slider-inner'),
+  const sliderWrapper = document.querySelector(wrapper),
+    slidesField = document.querySelector(field),
     width = window.getComputedStyle(sliderWrapper).width;
 
   let offset = 0;
@@ -160,4 +169,4 @@ function slider() {
   });
 }
 
-module.exports = slider;
+export default slider;

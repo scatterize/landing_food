@@ -1,6 +1,8 @@
-function forms() {
+import { openModal, closeModal } from './modal';
+import { postData } from '../services/services';
+function forms(formSelector, modalTimerId) {
   //Forms
-  const forms = document.querySelectorAll('form');
+  const forms = document.querySelectorAll(formSelector);
   const message = {
     loading: 'img/form/spinner.svg',
     success: 'success',
@@ -10,17 +12,6 @@ function forms() {
   forms.forEach((form, i) => {
     bindpostData(form);
   });
-
-  const postData = async (url, data) => {
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json',
-      },
-      body: data,
-    });
-    return await res.json();
-  };
 
   function bindpostData(form) {
     form.addEventListener('submit', (e) => {
@@ -79,6 +70,29 @@ function forms() {
       // });
     });
   }
+  //modal window for user
+  function showThanksModal(message) {
+    const prevModalDialog = document.querySelector('.modal__dialog');
+    prevModalDialog.classList.add('hide');
+    openModal('.modal', modalTimerId);
+
+    const thanksModal = document.createElement('div');
+    thanksModal.classList.add('modal__dialog');
+    thanksModal.innerHTML = `
+    <div class="modal__content">
+      <div data-close class="modal__close">&times;</div>
+      <div class="modal__title"> ${message} </div>
+    </div>
+    `;
+
+    document.querySelector('.modal').append(thanksModal);
+    setTimeout(() => {
+      thanksModal.remove();
+      prevModalDialog.classList.add('show');
+      prevModalDialog.classList.remove('hide');
+      closeModal('.modal');
+    }, 4000);
+  }
 }
 
-module.exports = forms;
+export default forms;
