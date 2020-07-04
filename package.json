@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/scatterize/landing_food#readme",
   "devDependencies": {
-    "json-server": "^0.16.1"
+    "json-server": "^0.16.1",
+    "webpack-cli": "^3.3.12"
   }
 }
